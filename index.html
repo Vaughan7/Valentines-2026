@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro-section {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .intro-section h1 {
+            font-size: 3em;
+            color: #8b4513;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        .intro-section p {
+            font-size: 1.3em;
+            color: #666;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .start-btn {
+            background: #d4816f;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .start-btn:hover {
+            background: #c06555;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .chapter {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .chapter.active {
+            display: block;
+        }
+
+        .chapter h2 {
+            color: #8b4513;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .chapter-intro {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .photo-letter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .photo-card {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .photo-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-front {
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-front .placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #a8b5c8 0%, #d4af9a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            font-size: 1.2em;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .click-hint {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .card-back {
+            background: #fff9f0;
+            transform: rotateY(180deg);
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .card-back::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .card-back::-webkit-scrollbar-thumb {
+            background: rgba(139, 69, 19, 0.3);
+            border-radius: 4px;
+        }
+
+        .letter-content {
+            color: #333;
+            font-size: 1.05em;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .letter-content p {
+            margin-bottom: 15px;
+        }
+
+        .letter-signature {
+            margin-top: 30px;
+            text-align: right;
+            font-style: italic;
+            color: #8b4513;
+        }
+
+        .flip-instruction {
+            text-align: center;
+            margin-top: 25px;
+            color: #8b4513;
+            font-size: 0.95em;
+            font-style: italic;
+        }
+
+        .chapter-nav {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .nav-btn {
+            background: #d4816f;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .nav-btn:hover {
+            background: #c06555;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .valentine-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px 50px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            display: none;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .valentine-section.active {
+            display: block;
+        }
+
+        .valentine-section h2 {
+            color: #8b4513;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .valentine-message {
+            font-size: 1.2em;
+            color: #666;
+            line-height: 2;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .heart-container {
+            margin: 50px 0;
+            position: relative;
+        }
+
+        .heart {
+            width: 100px;
+            height: 100px;
+            background: #ff6b6b;
+            position: relative;
+            margin: 0 auto;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .heart:hover {
+            transform: rotate(-45deg) scale(1.1);
+        }
+
+        .heart.clicked {
+            animation: heartExplode 0.6s ease-out;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 50px;
+            top: 0;
+        }
+
+        .heart-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            color: white;
+            font-size: 0.9em;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .final-message {
+            font-size: 1.4em;
+            color: #8b4513;
+            font-style: italic;
+            margin-top: 30px;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .final-message.show {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: rotate(-45deg) scale(1);
+            }
+            50% {
+                transform: rotate(-45deg) scale(1.05);
+            }
+        }
+
+        @keyframes heartExplode {
+            0% {
+                transform: rotate(-45deg) scale(1);
+            }
+            50% {
+                transform: rotate(-45deg) scale(1.3);
+            }
+            100% {
+                transform: rotate(-45deg) scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .intro-section h1 {
+                font-size: 2em;
+            }
+
+            .chapter {
+                padding: 30px 20px;
+            }
+
+            .card-back {
+                padding: 25px;
+            }
+
+            .letter-content {
+                font-size: 1em;
+            }
+
+            .valentine-section {
+                padding: 40px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="intro-section" id="intro">
+            <h1>A Journey Through Our Memories</h1>
+            <p>Distance may keep us apart, but these moments we shared will always connect us. I wanted to share some of my thoughts with you, and ask you something special.</p>
+            <button class="start-btn" onclick="startJourney()">Begin</button>
+        </div>
+
+        <div class="chapter" id="chapter1">
+            <h2>Chapter 1: The Beginning</h2>
+            <p class="chapter-intro">This is where it all started.</p>
+            <div class="photo-letter-container">
+                <div class="photo-card" onclick="flipCard(this)">
+                    <div class="card-face card-front">
+                        <img src="Images/photo1.jpg" alt="Us">
+     
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="letter-content">
+                            <p>Dear Taliah,</p>
+                            <p>When I think about a word to describe our beginning, a few come to mind. But one that I think we can't deny is: Serendipitous</p>
+                            <p>You didn't grow up right beside me, but the moment you walked into my life. It felt like you always belonged there. No long timeline, no shared past, just an instant, soul-deep connection that made perfect sense.</p>
+                            <p>You got me in a way few ever could. With no pressure, no judgement, just a love that felt like rest. Some connections don't need years to grow. They show up like fate, stay like family and never let go.</p>
+                            <p>And to think. It started with a random instagram post about an onion.</p>
+                            <div class="letter-signature">- Vaughan</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="flip-instruction">Click the photo to read the letter</p>
+            </div>
+            <div class="chapter-nav">
+                <button class="nav-btn" onclick="nextChapter(2)">Next Chapter →</button>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter2">
+            <h2>Chapter 2: The Red String</h2>
+            <p class="chapter-intro">Fate at Hand</p>
+            <div class="photo-letter-container">
+                <div class="photo-card" onclick="flipCard(this)">
+                    <div class="card-face card-front">
+                        <img src="Images/photo2.jpg" alt="Us"> 
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="letter-content">
+                            <p>Dear Taliah,</p>
+                            <p>They say there's an invisible string that connects two people who are meant to be in each other's lives. You can't see it, but it's always there. Soft, quiet, patient. It stretches across cities, oceans, and lifetimes. Never breaking, only  waiting for the right time to pull you close. The universe keeps two people apart until the time is right. Not out of cruelty or love, but out of care. It wants you both to grow, to heal, to understand what love truly means before you meet.</p>
+                            <p>Maybe we noticed the string and yanked it too soon. Because if you meet too soon, you pass each other by, too lost in our own storms to notice the calm in each other's eyes. And still the string waits, tangled in time, letting you wander, fall and rise again. It stays steady while you learn. And when the universe decides the moment has finally come, the string gives you a gentle pull, just enough to guide two souls back to where they belong. No rush, no noise, just a quiet crossing of paths that feels like home. Because the universe doesn't follow our clocks. It follows something deeper, something written in stars stitched with fate. And no matter how far you go, that invisible string will always lead you right to where life is meant to find you.</p>
+                            <div class="letter-signature">- Vaughan</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="flip-instruction">Click the photo to read the letter</p>
+            </div>
+            <div class="chapter-nav">
+                <button class="nav-btn" onclick="nextChapter(1)">← Previous</button>
+                <button class="nav-btn" onclick="nextChapter(3)">Next Chapter →</button>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter3">
+            <h2>Chapter 3: The Little Moments</h2>
+            <p class="chapter-intro">Sometimes the smallest moments mean the most.</p>
+            <div class="photo-letter-container">
+                <div class="photo-card" onclick="flipCard(this)">
+                    <div class="card-face card-front">
+                        <img src="images/photo3.jpg" alt="Us"> 
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="letter-content">
+                            <p>Dear Taliah,</p>
+                            <p>Something I always look back on with fond memories are the little moments and inside jokes we shared.</p>
+                            <p>From the movie tickets, curse coupons, "all these people", the lore updates, sitting in silence whilst the other works, the calls whilst getting ready, the NEIGHS, the Donnie Thornberry teasing after misspeaking and even the spelling mistake banter. Those are only a handful, but they are all a bunch of small moments that made our time together truly memorable. Even till today, I still look back and giggle like a little school girl about them. </p>
+                            <p>However, atop all those little moments, the one that made it all feel so special was actually something extra silly. Whenever we would be on video call and either of us would do the little face scrunch. Your smile after it made me absolutely melt and just put me at ease. Every. Single. Time. That was when I would be at my happiest. That is the smile I would do anything for. That is the little moment that felt bigger than even some of our big moments. That face, smile and feeling is something I will never and honestly, can't ever forget.</p>
+                            <div class="letter-signature">- Vaughan</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="flip-instruction">Click the photo to read the letter</p>
+            </div>
+            <div class="chapter-nav">
+                <button class="nav-btn" onclick="nextChapter(2)">← Previous</button>
+                <button class="nav-btn" onclick="nextChapter(4)">Next Chapter →</button>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter4">
+            <h2>Chapter 4: Lessons</h2>
+            <p class="chapter-intro">Growing and Learning from Mistakes</p>
+            <div class="photo-letter-container">
+                <div class="photo-card" onclick="flipCard(this)">
+                    <div class="card-face card-front">
+                        <img src="images/photo4.jpg" alt="Us"> 
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="letter-content">
+                            <p>Dear Taliah,</p>
+                            <p>Love is how we treat someone. Not how we feel about them. That's a lesson I learned way too late.</p>
+                            <p>I had it all backwards. I thought love was this big feeling, this rush, this thing that happens to us. I said "I Love You" and thought that was enough. Like the words carry weight on their own. Like just saying the words means I did my part. I got so caught up in the feelings, the butterflies, the "I Love You's" that I forgot that love is actually shown in the smallest, most boring moments. When you're exhausted but you still ask how their day was and actually listen. When you remember how they like their toast, even though liking it cold with unmelted butter is odd to me👀. When you wake them up when you'd rather sleep in. Because you can feel everything for someone and still make them feel like nothing. I can have all the love in my heart but if my actions don't match it, what's the point? You didn't feel my feelings. You felt how I treated you. Love isn't just what happens in your chest. It's what happens in your hands, your words, your presence. It's the choice you make when the feelings get quiet, life gets hard and showing up feels inconvenient. That's when love actually matters. </p>
+                            <p>And is the point of love not inconvenience? I understand that now. I want to go out of my way for the people I love. I want to put in the effort when it's hard. I want to show up even when I'm drained out. I don't want to be too scared of bothering my loved ones. Because loving means showing up when it's hard. When it's inconvenient.</p>
+                            <div class="letter-signature">- Vaughan</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="flip-instruction">Click the photo to read the letter</p>
+            </div>
+            <div class="chapter-nav">
+                <button class="nav-btn" onclick="nextChapter(3)">← Previous</button>
+                <button class="nav-btn" onclick="nextChapter(5)">Next Chapter →</button>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter5">
+            <h2>Chapter 5: You</h2>
+            <p class="chapter-intro">A testament to how special you are.</p>
+            <div class="photo-letter-container">
+                <div class="photo-card" onclick="flipCard(this)">
+                    <div class="card-face card-front">
+                        <img src="images/photo5.jpg" alt="Us">
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="letter-content">
+                            <p>Dear Taliah,</p>
+                            <p>You don't deserve just a paragraph to tell you just how special you are. You deserve entire books filled with the ways you make the world softer, brighter, and a little more hopeful. If people could see you the way I do, they would write chapters about your kindness, volumes about your strength and whole libraries about how your presence feels like home.</p>
+                            <p>You are not just simply "Amazing". You are the kind of rare magic people search for their whole lives.</p>
+                            <p>And if words ever fall short, remember this. Your existence itself is the most beautiful story ever written.</p>
+                            <div class="letter-signature">- Vaughan</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="flip-instruction">Click the photo to read the letter</p>
+            </div>
+            <div class="chapter-nav">
+                <button class="nav-btn" onclick="nextChapter(4)">← Previous</button>
+                <button class="nav-btn" onclick="showValentine()">Continue →</button>
+            </div>
+        </div>
+
+        <div class="valentine-section" id="valentine">
+            <h2>A Question for You</h2>
+            <div class="valentine-message">
+                <p>Looking back at these memories reminds me of the connection we shared. I know things are different now, and we're figuring out what comes next.</p>
+                <p>I'm not asking to go back to how things were. I'm not asking for anything more than this moment.</p>
+                <p>But I would love to celebrate this Valentine's Day together, even if it's just as a gesture of the care and appreciation I still have for you.</p>
+                <p>No pressure. No expectations. Just a chance to share something kind on a day that's meant for showing people they matter to you.</p>
+            </div>
+            <div class="heart-container">
+                <div class="heart" onclick="clickHeart()" id="heart">
+                    <div class="heart-text">Click me</div>
+                </div>
+            </div>
+            <div class="final-message" id="finalMessage">
+                Thank you for taking this journey through our memories with me. ❤️<br>
+                Will you be my Valentine?
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startJourney() {
+            document.getElementById('intro').style.display = 'none';
+            nextChapter(1);
+        }
+
+        function nextChapter(chapterNum) {
+            const chapters = document.querySelectorAll('.chapter');
+            chapters.forEach(chapter => chapter.classList.remove('active'));
+            
+            document.getElementById('chapter' + chapterNum).classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function showValentine() {
+            const chapters = document.querySelectorAll('.chapter');
+            chapters.forEach(chapter => chapter.classList.remove('active'));
+            
+            document.getElementById('valentine').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function clickHeart() {
+            const heart = document.getElementById('heart');
+            const finalMessage = document.getElementById('finalMessage');
+            
+            heart.classList.add('clicked');
+            
+            setTimeout(() => {
+                finalMessage.classList.add('show');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
