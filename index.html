@@ -330,6 +330,88 @@
             opacity: 1;
         }
 
+        .bonus-btn {
+            background: #8b4513;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            opacity: 0;
+            transform: translateY(20px);
+            display: inline-block;
+        }
+
+        .bonus-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bonus-btn:hover {
+            background: #6b3410;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .video-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px 50px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            display: none;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .video-section.active {
+            display: block;
+        }
+
+        .video-section h2 {
+            color: #8b4513;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+
+        .video-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #000;
+        }
+
+        .back-btn {
+            background: #d4816f;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .back-btn:hover {
+            background: #c06555;
+            transform: translateY(-2px);
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -389,6 +471,10 @@
             }
 
             .valentine-section {
+                padding: 40px 25px;
+            }
+
+            .video-section {
                 padding: 40px 25px;
             }
         }
@@ -460,7 +546,7 @@
             <div class="photo-letter-container">
                 <div class="photo-card" onclick="flipCard(this)">
                     <div class="card-face card-front">
-                        <img src="Images/photo3.jpg" alt="Us"> 
+                        <img src="images/photo3.jpg" alt="Us"> 
                     </div>
                     <div class="card-face card-back">
                         <div class="letter-content">
@@ -486,7 +572,7 @@
             <div class="photo-letter-container">
                 <div class="photo-card" onclick="flipCard(this)">
                     <div class="card-face card-front">
-                        <img src="Images/photo4.jpg" alt="Us"> 
+                        <img src="images/photo4.jpg" alt="Us"> 
                     </div>
                     <div class="card-face card-back">
                         <div class="letter-content">
@@ -512,7 +598,7 @@
             <div class="photo-letter-container">
                 <div class="photo-card" onclick="flipCard(this)">
                     <div class="card-face card-front">
-                        <img src="Images/photo5.jpg" alt="Us">
+                        <img src="images/photo5.jpg" alt="Us">
                     </div>
                     <div class="card-face card-back">
                         <div class="letter-content">
@@ -545,9 +631,14 @@
                     <div class="heart-text">Click me</div>
                 </div>
             </div>
-            <div class="final-message" id="finalMessage">
-                Thank you for taking this journey through our memories with me. ❤️<br>
-                Will you be my Valentine?
+        </div>
+
+        <div class="video-section" id="videoSection">
+            <div class="video-container">
+                <video id="bonusVideo" autoplay>
+                    <source src="Video/bonus_video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </div>
     </div>
@@ -581,15 +672,33 @@
 
         function clickHeart() {
             const heart = document.getElementById('heart');
-            const finalMessage = document.getElementById('finalMessage');
-            
             heart.classList.add('clicked');
             
+            // Go to video after heart animation
             setTimeout(() => {
-                finalMessage.classList.add('show');
-            }, 300);
+                showVideo();
+            }, 600);
+        }
+
+        function showVideo() {
+            document.getElementById('valentine').classList.remove('active');
+            document.getElementById('videoSection').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Play video
+            const video = document.getElementById('bonusVideo');
+            video.play();
+        }
+
+        function backToValentine() {
+            const video = document.getElementById('bonusVideo');
+            video.pause();
+            video.currentTime = 0;
+            
+            document.getElementById('videoSection').classList.remove('active');
+            document.getElementById('valentine').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
-
 </html>
